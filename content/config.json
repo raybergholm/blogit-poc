@@ -1,0 +1,6 @@
+{
+    "protocol": "https",
+    "hostUrl": "www.example.com/dev/blog",
+    "apiKey": "exampleapikey",
+    "secret": "itsasecret"
+}
