@@ -68,6 +68,8 @@ def upload(config, data):
 
     print("*** Response from {0}: {1} {2}".format(request_url, response.status, response.read()))
 
+    connection.close()
+
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Upload a blog entry or all entries to the hosted API. Either supply a filename with -s or use --all to upload the entire folder")
