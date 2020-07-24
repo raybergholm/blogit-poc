@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+import os
 import argparse
 import json
 from http.client import HTTPSConnection, HTTPConnection
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def main():
     CONFIG_FILE = "./config.json"
@@ -50,8 +54,8 @@ def upload(config, data):
     secret = config["secret"]
 
     connection = HTTPSConnection(
-            host_url) if protocol == "https" else HTTPConnection(host_url)
-    
+        host_url) if protocol == "https" else HTTPConnection(host_url)
+
     request_url = "{0}://{1}".format(protocol, host_url)
     headers = {
         "x-api-key": api_key,
@@ -62,21 +66,25 @@ def upload(config, data):
     print("*** Uploading to {0}".format(request_url))
 
     connection.request("POST", request_url,
-                                headers=headers, body=body)
+                       headers=headers, body=body)
 
     response = connection.getresponse()
 
-    print("*** Response from {0}: {1} {2}".format(request_url, response.status, response.read()))
+    print("*** Response from {0}: {1} {2}".format(request_url,
+                                                  response.status, response.read()))
 
     connection.close()
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Upload a blog entry or all entries to the hosted API. Either supply a filename with -s or use --all to upload the entire folder")
-    parser.add_argument("-s", "--single", dest="single", action="store", default=None, help="Filename of the entry to upload")
-    parser.add_argument("--all", dest="all", action="store_true", help="Upload all entries")
-    parser.add_argument("-d", "--dir", dest="dir", action="store", default="./posts", help="Directory where the posts can be found (default is './posts')")
-
+    parser.add_argument("-s", "--single", dest="single", action="store",
+                        default=None, help="Filename of the entry to upload")
+    parser.add_argument("--all", dest="all",
+                        action="store_true", help="Upload all entries")
+    parser.add_argument("-d", "--dir", dest="dir", action="store", default="{0}/posts".format(ROOT_DIR),
+                        help="Directory where the posts can be found (default is '<project_root>/posts')")
 
     args = parser.parse_args()
     return args
